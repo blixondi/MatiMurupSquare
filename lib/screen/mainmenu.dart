@@ -14,6 +14,7 @@ class MyMainMenu extends StatelessWidget {
       title: 'MatiMurup Square',
       theme: ThemeData(primarySwatch: Colors.deepOrange),
       home: MainMenu(),
+      debugShowCheckedModeBanner: false,
       routes: {
         'game': (context) => Game(),
       },
