@@ -3,6 +3,9 @@ import 'package:project_160420033/screen/mainmenu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
+int currentRound = 0;
+
+
 void main() {
   // runApp(const MainApp());
   runApp(MyMainMenu());
