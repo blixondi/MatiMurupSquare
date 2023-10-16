@@ -34,7 +34,7 @@ class MenuState extends State<MainMenu> {
   String _player2 = "";
   int _roundCount = 1;
   String _gameDifficulty = "Gampang";
-
+  
   final _textPlayer1 = TextEditingController();
   final _textPlayer2 = TextEditingController();
   final _textRoundCount = TextEditingController();

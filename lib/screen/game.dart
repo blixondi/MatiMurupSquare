@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:math';
+import 'package:project_160420033/screen/mainmenu.dart';
 
 class Game extends StatefulWidget {
   @override
@@ -12,13 +14,16 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
+  late String _player1 = "";
+  late String _player2 = "";
+  late String _gameDifficulty = "";
+  late int _roundCount = 0;
+
   int _initvalue = 10;
   int _currentPlayer = 1;
-  int _roundCount = 0;
-  
-  String _player1 = "";
-  String _player2 = "";
-  String _gameDifficulty = "";
+
+  var random = Random();
+
   String _player1status = "";
   String _player2status = "";
 
@@ -26,20 +31,26 @@ class _GameState extends State<Game> {
   late Timer _timer;
   late int _urut;
   late bool _boleh_klik;
-  
-  List _urutan_nyala = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+  //List _urutan_nyala = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  List _urutan_nyala = [];
   List _jawaban1 = [];
   List _jawaban2 = [];
   List _roundTracker = [];
 
   resetAll() {
+    if (_currentPlayer == 1) {
+      _currentPlayer = 2;
+    } else if (_currentPlayer == 2) {
+      _currentPlayer = 1;
+    }
+    _urut = 0;
     _initvalue = 10;
     _hitung = _initvalue;
-    _urutan_nyala = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    _urutan_nyala = [];
     _jawaban1 = [];
     _jawaban2 = [];
   }
-
 
   loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
@@ -52,7 +63,18 @@ class _GameState extends State<Game> {
   }
 
   randomize() {
-    _urutan_nyala.shuffle();
+    int sequence = 0;
+    int addedNumber = 0;
+    if (_gameDifficulty == "Gampang") {
+      sequence = 5;
+    } else if (_gameDifficulty == "Sedang") {
+      sequence = 8;
+    } else if (_gameDifficulty == "Susah") {
+      sequence = 12;
+    }
+    for (var i = 0; i < sequence; i++) {
+      _urutan_nyala.add(random.nextInt(9) + 1);
+    }
     _urutan_nyala.add(10);
   }
 
@@ -75,10 +97,16 @@ class _GameState extends State<Game> {
 
   @override
   void initState() {
+    //randomize();
     // TODO: implement initState
     super.initState();
     _urut = 0;
-    loadSettings();
+    initialization();
+  }
+
+  void initialization() async {
+    await loadSettings();
+    _urutan_nyala.clear();
     randomize();
     startTimer();
     print(_urutan_nyala);
@@ -100,8 +128,11 @@ class _GameState extends State<Game> {
       ),
       body: Center(
           child: Column(children: <Widget>[
-        Divider(
-          height: 10,
+        Padding(padding: EdgeInsets.all(5), child: Text('Hapalkan Polanya')),
+        Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 5), 
+          child: Text(
+            'Giliran ' + (_currentPlayer == 1 ? _player1 : _player2),
+            style: TextStyle(fontWeight: FontWeight.bold),)
         ),
         Container(
           child: GridView.builder(
@@ -123,7 +154,8 @@ class _GameState extends State<Game> {
                 Colors.indigo,
               ];
 
-              return (index == (_urutan_nyala[_urut] - 1))
+              return (_urut < _urutan_nyala.length &&
+                      index == (_urutan_nyala[_urut] - 1))
                   ? Container(
                       color: colors[index],
                       margin:
@@ -152,7 +184,15 @@ class _GameState extends State<Game> {
         Text(
           _jawaban1.join(', '), // Convert the array to a comma-separated string
           style: TextStyle(fontSize: 24),
-        )
+        ),
+        ElevatedButton(
+            onPressed: () {
+              setState(() {
+                resetAll();
+                initialization();
+              });
+            },
+            child: Text('aaaaaa'))
       ])),
     );
   }
