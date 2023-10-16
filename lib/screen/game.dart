@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:project_160420033/main.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
@@ -21,6 +22,7 @@ class _GameState extends State<Game> {
 
   int _initvalue = 10;
   int _currentPlayer = 1;
+  int _currentRound = 1;
 
   var random = Random();
 
@@ -30,9 +32,8 @@ class _GameState extends State<Game> {
   late int _hitung = _initvalue;
   late Timer _timer;
   late int _urut;
-  late bool _boleh_klik;
+  late bool _boleh_klik = false;
 
-  //List _urutan_nyala = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   List _urutan_nyala = [];
   List _jawaban1 = [];
   List _jawaban2 = [];
@@ -44,6 +45,7 @@ class _GameState extends State<Game> {
     } else if (_currentPlayer == 2) {
       _currentPlayer = 1;
     }
+    _currentRound++;
     _urut = 0;
     _initvalue = 10;
     _hitung = _initvalue;
@@ -124,16 +126,21 @@ class _GameState extends State<Game> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Game'),
+        title: Text('MatiMurup Square'),
       ),
       body: Center(
           child: Column(children: <Widget>[
-        Padding(padding: EdgeInsets.all(5), child: Text('Hapalkan Polanya')),
-        Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 5), 
-          child: Text(
-            'Giliran ' + (_currentPlayer == 1 ? _player1 : _player2),
-            style: TextStyle(fontWeight: FontWeight.bold),)
-        ),
+        Padding(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              'Giliran ' + (_currentPlayer == 1 ? _player1 : _player2),
+            )),
+        Padding(
+            padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
+            child: Text(
+              (_boleh_klik ? 'Tekan Tombol Sesuai Urutan' : 'Hapalkan Polanya'),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            )),
         Container(
           child: GridView.builder(
             itemCount: 9,
@@ -165,7 +172,9 @@ class _GameState extends State<Game> {
                       ? GestureDetector(
                           onTap: () {
                             setState(() {
-                              _jawaban1.add(index + 1);
+                              (_currentPlayer == 1
+                                  ? _jawaban1.add(index + 1)
+                                  : _jawaban2.add(index + 1));
                             });
                           },
                           child: Container(
@@ -181,8 +190,11 @@ class _GameState extends State<Game> {
           ),
           height: 400,
         ),
+        Text('Ronde ' + _currentRound.toString()),
+        Text('Level: ' + _gameDifficulty),
         Text(
-          _jawaban1.join(', '), // Convert the array to a comma-separated string
+          (_currentPlayer == 1 ? _jawaban1.join(', ') : _jawaban2.join(', ')),
+          // Convert the array to a comma-separated string
           style: TextStyle(fontSize: 24),
         ),
         ElevatedButton(
