@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, sort_child_properties_last, depend_on_referenced_packages
 
 import 'package:flutter/material.dart';
+import 'package:project_160420033/screen/roundresult.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
@@ -27,6 +28,7 @@ class _GameState extends State<Game> {
 
   String _player1status = "";
   String _player2status = "";
+  String roundresult = "";
 
   late int _hitung = _initvalue;
   late Timer _timer;
@@ -215,6 +217,7 @@ class _GameState extends State<Game> {
                                 if (_jawaban1.length ==
                                     _urutan_nyala.length - 1) {
                                   print('stop clicking');
+                                  _player1status = "win";
                                   switchPlayer();
                                 }
                               } else {
@@ -241,6 +244,27 @@ class _GameState extends State<Game> {
                                                   switchPlayer();
                                                   resetAll();
                                                   initialization();
+                                                  if (_player1status ==
+                                                      _player2status) {
+                                                    roundresult = "SEIMBANG";
+                                                  } else if (_player1status ==
+                                                      "win") {
+                                                    roundresult = _player1;
+                                                  } else if (_player2status ==
+                                                      "win") {
+                                                    roundresult = _player2;
+                                                  }
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              RoundResult(
+                                                                  _currentRound,
+                                                                  _roundCount,
+                                                                  _player1,
+                                                                  _player2,
+                                                                  roundresult,
+                                                                  _gameDifficulty)));
                                                 },
                                                 child: const Text('OK'),
                                               ),
@@ -252,10 +276,28 @@ class _GameState extends State<Game> {
                                 print(_jawaban2);
                                 if (_jawaban2.length ==
                                     _urutan_nyala.length - 1) {
+                                  _player2status = "win";
                                   print('stop clicking');
                                   switchPlayer();
                                   resetAll();
                                   initialization();
+                                  if (_player1status == _player2status) {
+                                    roundresult = "SEIMBANG";
+                                  } else if (_player1status == "win") {
+                                    roundresult = _player1;
+                                  } else if (_player2status == "win") {
+                                    roundresult = _player2;
+                                  }
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => RoundResult(
+                                              _currentRound,
+                                              _roundCount,
+                                              _player1,
+                                              _player2,
+                                              roundresult,
+                                              _gameDifficulty)));
                                 }
                               }
                             });
