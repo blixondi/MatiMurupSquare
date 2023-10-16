@@ -1,11 +1,9 @@
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, sort_child_properties_last, depend_on_referenced_packages
 
 import 'package:flutter/material.dart';
-import 'package:project_160420033/main.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
-import 'package:project_160420033/screen/mainmenu.dart';
 
 class Game extends StatefulWidget {
   @override
@@ -23,6 +21,7 @@ class _GameState extends State<Game> {
   int _initvalue = 10;
   int _currentPlayer = 1;
   int _currentRound = 1;
+  int _currentIndex = 0;
 
   var random = Random();
 
@@ -40,11 +39,6 @@ class _GameState extends State<Game> {
   List _roundTracker = [];
 
   resetAll() {
-    if (_currentPlayer == 1) {
-      _currentPlayer = 2;
-    } else if (_currentPlayer == 2) {
-      _currentPlayer = 1;
-    }
     _currentRound++;
     _urut = 0;
     _initvalue = 10;
@@ -52,6 +46,19 @@ class _GameState extends State<Game> {
     _urutan_nyala = [];
     _jawaban1 = [];
     _jawaban2 = [];
+  }
+
+  switchPlayer() {
+    _urut = 0;
+    _initvalue = 10;
+    _hitung = _initvalue;
+    _currentIndex = 0;
+    if (_currentPlayer == 1) {
+      _currentPlayer = 2;
+    } else if (_currentPlayer == 2) {
+      _currentPlayer = 1;
+    }
+    startTimer();
   }
 
   loadSettings() async {
@@ -172,9 +179,85 @@ class _GameState extends State<Game> {
                       ? GestureDetector(
                           onTap: () {
                             setState(() {
-                              (_currentPlayer == 1
-                                  ? _jawaban1.add(index + 1)
-                                  : _jawaban2.add(index + 1));
+                              if (_currentPlayer == 1) {
+                                _jawaban1.add(index + 1);
+                                if (_jawaban1[_currentIndex] !=
+                                    _urutan_nyala[_currentIndex]) {
+                                  showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                            title: Text(
+                                              'Urutan Salah',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            content: Text('Sayang sekali ' +
+                                                _player1 +
+                                                ', kamu menekan urutan yang salah.'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context, 'OK');
+                                                  _player1status = "lose";
+                                                  setState(() {
+                                                    switchPlayer();
+                                                  });
+                                                },
+                                                child: const Text('OK'),
+                                              ),
+                                            ],
+                                          ));
+                                }
+                                _currentIndex++;
+                                print('current jawaban1 array:');
+                                print(_jawaban1);
+                                if (_jawaban1.length ==
+                                    _urutan_nyala.length - 1) {
+                                  print('stop clicking');
+                                  switchPlayer();
+                                }
+                              } else {
+                                _jawaban2.add(index + 1);
+                                if (_jawaban2[_currentIndex] !=
+                                    _urutan_nyala[_currentIndex]) {
+                                  showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                            title: Text(
+                                              'Urutan Salah',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            content: Text('Sayang sekali ' +
+                                                _player2 +
+                                                ', kamu menekan urutan yang salah.'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context, 'OK');
+                                                  _player2status = "lose";
+                                                  switchPlayer();
+                                                  resetAll();
+                                                  initialization();
+                                                },
+                                                child: const Text('OK'),
+                                              ),
+                                            ],
+                                          ));
+                                }
+                                _currentIndex++;
+                                print('current jawaban2 array:');
+                                print(_jawaban2);
+                                if (_jawaban2.length ==
+                                    _urutan_nyala.length - 1) {
+                                  print('stop clicking');
+                                  switchPlayer();
+                                  resetAll();
+                                  initialization();
+                                }
+                              }
                             });
                           },
                           child: Container(
@@ -204,7 +287,7 @@ class _GameState extends State<Game> {
                 initialization();
               });
             },
-            child: Text('aaaaaa'))
+            child: Text('Change Round'))
       ])),
     );
   }
