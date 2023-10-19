@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_160420033/screen/finalresult.dart';
 
 class RoundResult extends StatelessWidget {
   final int currentRound;
@@ -7,14 +8,15 @@ class RoundResult extends StatelessWidget {
   final String player2;
   final String result;
   final String difficulty;
+  final List roundList;
   RoundResult(this.currentRound, this.roundCount, this.player1, this.player2,
-      this.result, this.difficulty);
+      this.result, this.difficulty, this.roundList);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Result'),
+        title: Text('Round Result'),
       ),
       body: Center(
           child: Column(
@@ -24,8 +26,15 @@ class RoundResult extends StatelessWidget {
           Text('$result'),
           ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
-              }, child: Text('Lanjut Ronde $currentRound'))
+                if (currentRound == roundCount) {
+                  Navigator.popAndPushNamed(context, FinalResult(roundList) as String);
+                } else {
+                  Navigator.pop(context);
+                }
+              },
+              child: Text((currentRound == roundCount)
+                  ? 'Lihat hasil akhir'
+                  : 'Lanjut Ronde $currentRound'))
         ],
       )),
     );

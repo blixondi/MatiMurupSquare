@@ -107,6 +107,23 @@ class _GameState extends State<Game> {
   }
 
   @override
+  void goToRoundResult() async {
+    switchPlayer();
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => RoundResult(
+                _currentRound,
+                _roundCount,
+                _player1,
+                _player2,
+                roundresult,
+                _gameDifficulty,
+                _roundTracker)));
+    resetAll();
+    initialization();
+  }
+
   void initState() {
     //randomize();
     // TODO: implement initState
@@ -186,6 +203,7 @@ class _GameState extends State<Game> {
                                 if (_jawaban1[_currentIndex] !=
                                     _urutan_nyala[_currentIndex]) {
                                   showDialog<String>(
+                                      barrierDismissible: false,
                                       context: context,
                                       builder: (BuildContext context) =>
                                           AlertDialog(
@@ -218,13 +236,35 @@ class _GameState extends State<Game> {
                                     _urutan_nyala.length - 1) {
                                   print('stop clicking');
                                   _player1status = "win";
-                                  switchPlayer();
+                                  showDialog<String>(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                            title: Text(
+                                              'Giliran Selesai',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            content: Text(
+                                                'Silahkan ganti ke pemain berikutnya'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context, 'OK');
+                                                  switchPlayer();
+                                                },
+                                                child: const Text('OK'),
+                                              ),
+                                            ],
+                                          ));
                                 }
                               } else {
                                 _jawaban2.add(index + 1);
                                 if (_jawaban2[_currentIndex] !=
                                     _urutan_nyala[_currentIndex]) {
                                   showDialog<String>(
+                                      barrierDismissible: false,
                                       context: context,
                                       builder: (BuildContext context) =>
                                           AlertDialog(
@@ -233,38 +273,28 @@ class _GameState extends State<Game> {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
-                                            content: Text('Sayang sekali ' +
-                                                _player2 +
-                                                ', kamu menekan urutan yang salah.'),
+                                            content: Text(
+                                                'Sayang sekali $_player2, kamu menekan urutan yang salah.'),
                                             actions: <Widget>[
                                               TextButton(
                                                 onPressed: () {
                                                   Navigator.pop(context, 'OK');
                                                   _player2status = "lose";
-                                                  switchPlayer();
-                                                  resetAll();
-                                                  initialization();
                                                   if (_player1status ==
                                                       _player2status) {
+                                                    _roundTracker
+                                                        .add('Seimbang');
                                                     roundresult = "SEIMBANG";
                                                   } else if (_player1status ==
                                                       "win") {
+                                                    _roundTracker.add(_player1);
                                                     roundresult = _player1;
                                                   } else if (_player2status ==
                                                       "win") {
+                                                    _roundTracker.add(_player2);
                                                     roundresult = _player2;
                                                   }
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              RoundResult(
-                                                                  _currentRound,
-                                                                  _roundCount,
-                                                                  _player1,
-                                                                  _player2,
-                                                                  roundresult,
-                                                                  _gameDifficulty)));
+                                                  goToRoundResult();
                                                 },
                                                 child: const Text('OK'),
                                               ),
@@ -278,9 +308,6 @@ class _GameState extends State<Game> {
                                     _urutan_nyala.length - 1) {
                                   _player2status = "win";
                                   print('stop clicking');
-                                  switchPlayer();
-                                  resetAll();
-                                  initialization();
                                   if (_player1status == _player2status) {
                                     roundresult = "SEIMBANG";
                                   } else if (_player1status == "win") {
@@ -288,16 +315,7 @@ class _GameState extends State<Game> {
                                   } else if (_player2status == "win") {
                                     roundresult = _player2;
                                   }
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => RoundResult(
-                                              _currentRound,
-                                              _roundCount,
-                                              _player1,
-                                              _player2,
-                                              roundresult,
-                                              _gameDifficulty)));
+                                  goToRoundResult();
                                 }
                               }
                             });
@@ -315,8 +333,8 @@ class _GameState extends State<Game> {
           ),
           height: 400,
         ),
-        Text('Ronde ' + _currentRound.toString()),
-        Text('Level: ' + _gameDifficulty),
+        Text('Ronde $_currentRound'),
+        Text('Level: $_gameDifficulty'),
         Text(
           (_currentPlayer == 1 ? _jawaban1.join(', ') : _jawaban2.join(', ')),
           // Convert the array to a comma-separated string
