@@ -24,21 +24,26 @@ class RoundResult extends StatelessWidget {
           Text('Hasil Ronde $currentRound (Level: $difficulty)'),
           Text('$player1 VS $player2'),
           Text('$result'),
-          ElevatedButton(
+          OutlinedButton(
               onPressed: () {
                 if (currentRound == roundCount) {
                   print(roundList);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: ((context) => FinalResult(roundList, player1, player2))));
+                          builder: ((context) =>
+                              FinalResult(roundList, player1, player2))));
                 } else {
                   Navigator.pop(context);
                 }
               },
               child: Text((currentRound == roundCount)
                   ? 'Lihat hasil akhir'
-                  : 'Lanjut Ronde ${currentRound+1}'))
+                  : 'Lanjut Ronde ${currentRound + 1}'),
+              style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)))))
         ],
       )),
     );
