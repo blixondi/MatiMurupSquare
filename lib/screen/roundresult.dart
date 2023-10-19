@@ -8,7 +8,7 @@ class RoundResult extends StatelessWidget {
   final String player2;
   final String result;
   final String difficulty;
-  final List roundList;
+  final List<String> roundList;
   RoundResult(this.currentRound, this.roundCount, this.player1, this.player2,
       this.result, this.difficulty, this.roundList);
 
@@ -27,14 +27,18 @@ class RoundResult extends StatelessWidget {
           ElevatedButton(
               onPressed: () {
                 if (currentRound == roundCount) {
-                  Navigator.popAndPushNamed(context, FinalResult(roundList) as String);
+                  print(roundList);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) => FinalResult(roundList, player1, player2))));
                 } else {
                   Navigator.pop(context);
                 }
               },
               child: Text((currentRound == roundCount)
                   ? 'Lihat hasil akhir'
-                  : 'Lanjut Ronde $currentRound'))
+                  : 'Lanjut Ronde ${currentRound+1}'))
         ],
       )),
     );

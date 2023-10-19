@@ -38,7 +38,7 @@ class _GameState extends State<Game> {
   List _urutan_nyala = [];
   List _jawaban1 = [];
   List _jawaban2 = [];
-  List _roundTracker = [];
+  List<String> _roundTracker = [];
 
   resetAll() {
     _currentRound++;
@@ -309,10 +309,13 @@ class _GameState extends State<Game> {
                                   _player2status = "win";
                                   print('stop clicking');
                                   if (_player1status == _player2status) {
+                                    _roundTracker.add('Seimbang');
                                     roundresult = "SEIMBANG";
                                   } else if (_player1status == "win") {
+                                    _roundTracker.add(_player1);
                                     roundresult = _player1;
                                   } else if (_player2status == "win") {
+                                    _roundTracker.add(_player2);
                                     roundresult = _player2;
                                   }
                                   goToRoundResult();
@@ -335,19 +338,6 @@ class _GameState extends State<Game> {
         ),
         Text('Ronde $_currentRound'),
         Text('Level: $_gameDifficulty'),
-        Text(
-          (_currentPlayer == 1 ? _jawaban1.join(', ') : _jawaban2.join(', ')),
-          // Convert the array to a comma-separated string
-          style: TextStyle(fontSize: 24),
-        ),
-        ElevatedButton(
-            onPressed: () {
-              setState(() {
-                resetAll();
-                initialization();
-              });
-            },
-            child: Text('Change Round'))
       ])),
     );
   }
