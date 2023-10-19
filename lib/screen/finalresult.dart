@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project_160420033/screen/game.dart';
+import 'package:project_160420033/screen/mainmenu.dart';
 
 class FinalResult extends StatelessWidget {
   final List<String> roundList;
@@ -44,13 +46,39 @@ class FinalResult extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Padding(
-                    padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                    child: ElevatedButton(
-                        onPressed: () {}, child: Text('Button a'))),
+                  padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                  child: OutlinedButton(
+                      style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20)))),
+                      onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => Game())),
+                              ModalRoute.withName('/game'));
+                        },
+                      child: Text('Main Lagi')),
+                ),
                 Padding(
-                    padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                    padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
                     child: ElevatedButton(
-                        onPressed: () {}, child: Text('Button B'))),
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)))),
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => MainMenu())),
+                              ModalRoute.withName('/'));
+                        },
+                        child: Text('Menu Utama'))),
               ],
             )
           ],

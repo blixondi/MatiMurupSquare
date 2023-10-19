@@ -91,7 +91,7 @@ class _GameState extends State<Game> {
 
   startTimer() {
     _boleh_klik = false;
-    _timer = Timer.periodic(Duration(milliseconds: 500), (timer) {
+    _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
       setState(() {
         _hitung--;
         if (_hitung <= 0) {
