@@ -75,7 +75,6 @@ class _GameState extends State<Game> {
 
   randomize() {
     int sequence = 0;
-    int addedNumber = 0;
     if (_gameDifficulty == "Gampang") {
       sequence = 5;
     } else if (_gameDifficulty == "Sedang") {
