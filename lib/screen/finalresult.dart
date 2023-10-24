@@ -13,7 +13,7 @@ class FinalResult extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Final Result'),
+        title: Text('Final Result', style: TextStyle(fontSize: 20)),
       ),
       body: Center(
         child: Column(
@@ -21,10 +21,10 @@ class FinalResult extends StatelessWidget {
             Text('Hasil Permainan'),
             Text(
               '$player1 vs $player2',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(0, 5, 0, 10),
+              padding: EdgeInsets.fromLTRB(0, 5, 0, 20),
               child: Card(
                 child: DataTable(
                   columns: [

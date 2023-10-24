@@ -21,9 +21,18 @@ class RoundResult extends StatelessWidget {
       body: Center(
           child: Column(
         children: <Widget>[
-          Text('Hasil Ronde $currentRound (Level: $difficulty)'),
-          Text('$player1 VS $player2'),
-          Text('$result'),
+          Text(
+            'Hasil Ronde $currentRound (Level: $difficulty)',
+            style: TextStyle(fontSize: 20),
+          ),
+          Text(
+            '$player1 VS $player2',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+          Padding(
+            padding: EdgeInsets.all(50),
+            child: Text('$result', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+          ),
           OutlinedButton(
               onPressed: () {
                 if (currentRound == roundCount) {

@@ -158,13 +158,14 @@ class _GameState extends State<Game> {
         Padding(
             padding: EdgeInsets.all(5),
             child: Text(
-              'Giliran ' + (_currentPlayer == 1 ? _player1 : _player2),
+              'Giliran ${_currentPlayer == 1 ? _player1 : _player2}',
+              style: TextStyle(fontSize: 25),
             )),
         Padding(
             padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
             child: Text(
               (_boleh_klik ? 'Tekan Tombol Sesuai Urutan' : 'Hapalkan Polanya'),
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
             )),
         Container(
           child: GridView.builder(
@@ -211,29 +212,36 @@ class _GameState extends State<Game> {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
-                                            content: Text('Sayang sekali ' +
-                                                _player1 +
-                                                ', kamu menekan urutan yang salah.'),
+                                            content: Text(
+                                                'Sayang sekali $_player1, kamu menekan urutan yang salah.'),
                                             actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context, 'OK');
-                                                  _player1status = "lose";
-                                                  setState(() {
-                                                    switchPlayer();
-                                                  });
-                                                },
-                                                child: const Text('OK'),
-                                              ),
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(
+                                                        context, 'OK');
+                                                    _player1status = "lose";
+                                                    setState(() {
+                                                      switchPlayer();
+                                                    });
+                                                  },
+                                                  child: const Text('OK'),
+                                                  style: ButtonStyle(
+                                                      shape: MaterialStateProperty.all<
+                                                              RoundedRectangleBorder>(
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20))))),
                                             ],
                                           ));
                                 }
                                 _currentIndex++;
-                                print('current jawaban1 array:');
-                                print(_jawaban1);
+                                // print('current jawaban1 array:');
+                                // print(_jawaban1);
                                 if (_jawaban1.length ==
                                     _urutan_nyala.length - 1) {
-                                  print('stop clicking');
+                                  // print('stop clicking');
                                   _player1status = "win";
                                   showDialog<String>(
                                       barrierDismissible: false,
@@ -248,13 +256,21 @@ class _GameState extends State<Game> {
                                             content: Text(
                                                 'Silahkan ganti ke pemain berikutnya'),
                                             actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context, 'OK');
-                                                  switchPlayer();
-                                                },
-                                                child: const Text('OK'),
-                                              ),
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(
+                                                        context, 'OK');
+                                                    switchPlayer();
+                                                  },
+                                                  child: const Text('OK'),
+                                                  style: ButtonStyle(
+                                                      shape: MaterialStateProperty.all<
+                                                              RoundedRectangleBorder>(
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20))))),
                                             ],
                                           ));
                                 }
@@ -275,34 +291,44 @@ class _GameState extends State<Game> {
                                             content: Text(
                                                 'Sayang sekali $_player2, kamu menekan urutan yang salah.'),
                                             actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context, 'OK');
-                                                  _player2status = "lose";
-                                                  if (_player1status ==
-                                                      _player2status) {
-                                                    _roundTracker
-                                                        .add('Seimbang');
-                                                    roundresult = "SEIMBANG";
-                                                  } else if (_player1status ==
-                                                      "win") {
-                                                    _roundTracker.add(_player1);
-                                                    roundresult = _player1;
-                                                  } else if (_player2status ==
-                                                      "win") {
-                                                    _roundTracker.add(_player2);
-                                                    roundresult = _player2;
-                                                  }
-                                                  goToRoundResult();
-                                                },
-                                                child: const Text('OK'),
-                                              ),
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(
+                                                        context, 'OK');
+                                                    _player2status = "lose";
+                                                    if (_player1status ==
+                                                        _player2status) {
+                                                      _roundTracker
+                                                          .add('Seimbang');
+                                                      roundresult = "SEIMBANG";
+                                                    } else if (_player1status ==
+                                                        "win") {
+                                                      _roundTracker
+                                                          .add(_player1);
+                                                      roundresult = _player1;
+                                                    } else if (_player2status ==
+                                                        "win") {
+                                                      _roundTracker
+                                                          .add(_player2);
+                                                      roundresult = _player2;
+                                                    }
+                                                    goToRoundResult();
+                                                  },
+                                                  child: const Text('OK'),
+                                                  style: ButtonStyle(
+                                                      shape: MaterialStateProperty.all<
+                                                              RoundedRectangleBorder>(
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20))))),
                                             ],
                                           ));
                                 }
                                 _currentIndex++;
-                                print('current jawaban2 array:');
-                                print(_jawaban2);
+                                // print('current jawaban2 array:');
+                                // print(_jawaban2);
                                 if (_jawaban2.length ==
                                     _urutan_nyala.length - 1) {
                                   _player2status = "win";
@@ -335,8 +361,14 @@ class _GameState extends State<Game> {
           ),
           height: 400,
         ),
-        Text('Ronde $_currentRound'),
-        Text('Level: $_gameDifficulty'),
+        Text(
+          'Ronde $_currentRound',
+          style: TextStyle(fontSize: 25),
+        ),
+        Text(
+          'Level: $_gameDifficulty',
+          style: TextStyle(fontSize: 25),
+        ),
       ])),
     );
   }
